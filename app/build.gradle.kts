@@ -11,6 +11,13 @@ plugins {
 dependencies {
     implementation("org.apache.commons:commons-text")
     implementation(project(":utilities"))
+    implementation("ch.qos.logback:logback-classic:1.4.8")
+    implementation("com.typesafe:config:1.4.2")
+    implementation("io.smallrye.reactive:mutiny:2.3.1")
+    implementation("org.evrete:evrete-core:3.0.03")
+    implementation("org.evrete:evrete-dsl-java:3.0.03")
+    implementation("org.optaplanner:optaplanner-bom:9.41.0.Final")
+    implementation("org.optaplanner:optaplanner-core:9.41.0.Final")
 }
 
 application {
