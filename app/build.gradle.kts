@@ -3,12 +3,25 @@
  *
  * This project uses @Incubating APIs which are subject to change.
  */
+import com.google.protobuf.gradle.*
 
 plugins {
+    id("java")
     id("atk.java-application-conventions")
+    id("com.google.protobuf") version "0.9.4"
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
+    implementation("commons-cli:commons-cli:1.5.0")
     implementation("org.apache.commons:commons-text")
     implementation(project(":utilities"))
     implementation("ch.qos.logback:logback-classic:1.4.8")
@@ -18,6 +31,29 @@ dependencies {
     implementation("org.evrete:evrete-dsl-java:3.0.03")
     implementation("org.optaplanner:optaplanner-bom:9.41.0.Final")
     implementation("org.optaplanner:optaplanner-core:9.41.0.Final")
+    implementation("com.google.protobuf:protobuf-java:3.22.3")
+    implementation("io.grpc:grpc-stub:1.57.1")
+    implementation("io.grpc:grpc-protobuf:1.57.1")
+    implementation("io.grpc:grpc-services:1.57.1")
+    implementation("com.google.protobuf:protobuf-java-util:3.22.3")
+    compileOnly("org.apache.tomcat:annotations-api:6.0.53")
+    runtimeOnly("io.grpc:grpc-netty-shaded:1.57.1")
+
+
+}
+
+protobuf {
+    protoc { artifact = "com.google.protobuf:protoc:3.22.3" }
+    plugins {
+        id("grpc") { artifact = "io.grpc:protoc-gen-grpc-java:1.57.1" }
+    }
+    generateProtoTasks {
+        ofSourceSet("main").forEach {
+            it.plugins {
+                id("grpc") { }
+            }
+        }
+    }
 }
 
 application {

@@ -3,23 +3,56 @@
  */
 package atk.app;
 
-import atk.list.LinkedList;
 
-import static atk.utilities.StringUtils.join;
-import static atk.utilities.StringUtils.split;
-import static atk.app.MessageUtils.getMessage;
-
-import org.apache.commons.text.WordUtils;
+import com.typesafe.config.Config;
+import com.typesafe.config.ConfigFactory;
+import org.apache.commons.cli.*;
 import org.evrete.KnowledgeService;
+
 
 public class App {
     public static void main(String[] args) {
 
+        Config conf = ConfigFactory.load();
+
         KnowledgeService service = new KnowledgeService();
 
-        LinkedList tokens;
-        tokens = split(getMessage());
-        String result = join(tokens);
-        System.out.println(WordUtils.capitalize(result));
+        Options options = new Options();
+
+        Option clientArg = Option.builder("clientArg")
+                        .longOpt("client")
+                        .argName("client")
+                        .hasArg(false)
+                        .desc("Start the client")
+                        .build();
+        options.addOption(clientArg);
+
+        Option serverArg = Option.builder("serverArg")
+                        .longOpt("server")
+                        .argName("server")
+                        .hasArg(false)
+                        .desc("Start the server")
+                        .build();
+        options.addOption(serverArg);
+
+        CommandLineParser parser = new DefaultParser();
+        try {
+            CommandLine cmd = parser.parse(options, args);
+            if (cmd.hasOption(clientArg)) {
+                RouteGuideClient.runClient(null);
+            } else if (cmd.hasOption(serverArg)) {
+                RouteGuideServer.main(args);
+            } else {
+                System.out.println("Standalone mode is not yet supported. Please launch client and server instances.");
+            }
+        } catch (ParseException | InterruptedException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+//        LinkedList tokens;
+//        tokens = split(getMessage());
+//        String result = join(tokens);
+//        System.out.println(WordUtils.capitalize(result));
     }
 }
