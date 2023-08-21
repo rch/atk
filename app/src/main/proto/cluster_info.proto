@@ -1,0 +1,91 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "atk.msg.clusterinfo";
+option java_outer_classname = "ClusterInfoProto";
+option objc_class_prefix = "CDP";
+
+package clusterinfo;
+
+import "google/protobuf/timestamp.proto";
+
+/**
+ *     "id": 1687498463283,
+ *     "startedOn": 1687498463283,
+ *     "state": "STARTED",
+ *     "haState": "ACTIVE",
+ *     "rmStateStoreName": "org.apache.hadoop.yarn.server.resourcemanager.recovery.ZKRMStateStore",
+ *     "resourceManagerVersion": "3.0.0-cdh6.3.3",
+ *     "resourceManagerBuildVersion": "3.0.0-cdh6.3.3 from cf849054a5901ece520f9ced04374604acdf43dc by jenkins source checksum fbdc34c999acc7fde8b1aaf4c3ec4e4",
+ *     "resourceManagerVersionBuiltOn": "2023-03-21T16:05Z",
+ *     "hadoopVersion": "3.0.0-cdh6.3.3",
+ *     "hadoopBuildVersion": "3.0.0-cdh6.3.3 from cf849054a5901ece520f9ced04374604acdf43dc by jenkins source checksum 99ddbd8a29104326ee08d96e9e5d580",
+ *     "hadoopVersionBuiltOn": "2023-03-21T16:01Z",
+ *     "haZooKeeperConnectionState": "CONNECTED"
+ */
+service ClusterAgent {
+
+  rpc ClusterSpec(ClusterInfo) returns (AgentStatus) {}
+
+  rpc ClusterApps(stream AppEntry) returns (stream AppUpdate) {}
+
+  rpc ClusterNodes(stream NodeEntry) returns (stream NodeUpdate) {}
+}
+
+message AgentStatus {
+  string value = 1;
+}
+
+message  ClusterInfo {
+  enum ClusterInfoState {
+      UNKNOWN_CLUSTER_STATE = 0;
+      STARTED = 1;
+      STOPPED = 2;
+  }
+  enum ClusterInfoHAState {
+    UNKNOWN_HA_STATE = 0;
+    ACTIVE = 1;
+    INACTIVE = 2;
+  }
+  enum HAZooKeeperConnectionState {
+    UNKNOWN_HA_ZK_STATE = 0;
+    CONNECTED = 1;
+  }
+  int32 id = 1;
+
+  google.protobuf.Timestamp startedOn = 2;
+
+  int32 startedOnZoneOffset = 3;
+
+  ClusterInfoState state = 4;
+
+  string rmStateStoreName = 5;
+
+  string resourceManagerVersion = 6;
+
+  string resourceManagerBuildVersion = 7;
+
+  string resourceManagerVersionBuiltOn = 8;
+
+  string hadoopBuildVersion = 9;
+
+  string hadoopVersionBuiltOn = 10;
+
+  HAZooKeeperConnectionState haZooKeeperConnectionState = 11;
+}
+
+message AppEntry {
+  string id = 1;
+}
+
+message AppUpdate {
+  string id = 1;
+}
+
+message NodeEntry {
+  string id = 1;
+}
+
+message NodeUpdate {
+  string id = 1;
+}

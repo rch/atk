@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "atk.msg.common";
+option java_outer_classname = "CommonProto";
+option objc_class_prefix = "CDP";
+
+package common;
+
+/**
+/// serialize a java.math.BigDecimal to Protobuf
+import com.google.protobuf.ByteString;
+import DecimalValue;
+
+java.math.BigDecimal bigDecimal = new java.math.BigDecimal("1234.56789");
+DecimalValue serialized = DecimalValue.newBuilder()
+        .setScale(bigDecimal.scale())
+        .setPrecision(bigDecimal.precision())
+        .setValue(ByteString.copyFrom(bigDecimal.unscaledValue().toByteArray()))
+        .build();
+
+//// deserialize the Protobuf message to a java.math.BigDecimal
+java.math.MathContext mc = new java.math.MathContext(serialized.getPrecision());
+java.math.BigDecimal deserialized = new java.math.BigDecimal(
+        new java.math.BigInteger(serialized.getValue().toByteArray()),
+        serialized.getScale(),
+        mc);
+ */
+message Decimal {
+  uint32 scale = 1;
+  uint32 precision = 2;
+  bytes value = 3;
+}

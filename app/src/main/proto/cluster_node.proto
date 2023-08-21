@@ -1,0 +1,149 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "atk.msg.clusterinfo";
+option java_outer_classname = "ClusterNodeProto";
+option objc_class_prefix = "CDP";
+
+package clusterinfo;
+
+import "google/protobuf/timestamp.proto";
+import "common.proto";
+
+/**
+{
+        "rack": "/rack1",
+        "state": "RUNNING",
+        "id": "lbdp21bbd.qa.pncint.net:8041",
+        "nodeHostName": "lbdp21bbd.qa.pncint.net",
+        "nodeHTTPAddress": "lbdp21bbd.qa.pncint.net:8044",
+        "lastHealthUpdate": 1689354049116,
+        "version": "3.0.0-cdh6.3.3",
+        "healthReport": "",
+        "numContainers": 12,
+        "usedMemoryMB": 134144,
+        "availMemoryMB": 21504,
+        "usedVirtualCores": 18,
+        "availableVirtualCores": 24,
+        "numRunningOpportContainers": 0,
+        "usedMemoryOpportGB": 0,
+        "usedVirtualCoresOpport": 0,
+        "numQueuedContainers": 0,
+        "resourceUtilization": {
+          "nodePhysicalMemoryMB": 295379,
+          "nodeVirtualMemoryMB": 295841,
+          "nodeCPUUsage": 17.138574600219727,
+          "aggregatedContainersPhysicalMemoryMB": 52196,
+          "aggregatedContainersVirtualMemoryMB": 131615,
+          "containersCPUUsage": 14.938000679016113
+        },
+        "usedResource": {
+          "memory": 134144,
+          "vCores": 18,
+          "resourceInformations": {
+            "resourceInformation": [
+              {
+                "maximumAllocation": 9223372036854776000,
+                "minimumAllocation": 0,
+                "name": "memory-mb",
+                "resourceType": "COUNTABLE",
+                "units": "Mi",
+                "value": 134144
+              },
+              {
+                "maximumAllocation": 9223372036854776000,
+                "minimumAllocation": 0,
+                "name": "vcores",
+                "resourceType": "COUNTABLE",
+                "units": "",
+                "value": 18
+              }
+            ]
+          }
+        },
+        "availableResource": {
+          "memory": 21504,
+          "vCores": 24,
+          "resourceInformations": {
+            "resourceInformation": [
+              {
+                "maximumAllocation": 9223372036854776000,
+                "minimumAllocation": 0,
+                "name": "memory-mb",
+                "resourceType": "COUNTABLE",
+                "units": "Mi",
+                "value": 21504
+              },
+              {
+                "maximumAllocation": 9223372036854776000,
+                "minimumAllocation": 0,
+                "name": "vcores",
+                "resourceType": "COUNTABLE",
+                "units": "",
+                "value": 24
+              }
+            ]
+          }
+        }
+ */
+
+message ResourceInformation {
+  enum ResourceInfoType {
+    UNKNOWN_INFO_TYPE = 0;
+    COUNTABLE = 1;
+  }
+  enum ResourceInfoName {
+    UNKNOWN_INFO_NAME = 0;
+    MEMORY_MB = 1;  // "memory-mb"
+  }
+  enum ResourceInfoUnits {
+    UNKNOWN_INFO_UNITS = 0;
+    EMPTY_INFO_UNITS = 1;
+    M_I = 2;  // "Mi"
+  }
+  int64 maximumAllocation = 1;
+  int32 minimumAllocation = 2;
+  ResourceInfoName name = 3;
+  ResourceInfoType resourceType = 4;
+  ResourceInfoUnits units = 5;
+  int64 value = 6;
+}
+
+message AvailableResource {
+  int64 memory = 1;
+  int32 vCores = 2;
+  repeated ResourceInformation resourceInformations = 3;
+}
+
+message ResourceUtilization {
+  int64 nodePhysicalMemoryMB = 1; // 295379,
+  int64 nodeVirtualMemoryMB = 2; //  295841,
+  common.Decimal nodeCPUUsage = 3; // 17.138574600219727,
+  int64 aggregatedContainersPhysicalMemoryMB = 4; // 52196,
+  int64 aggregatedContainersVirtualMemoryMB = 5; // 131615,
+  common.Decimal containersCPUUsage = 6; // 14.938000679016113
+}
+
+message ClusterNode {
+  enum ClusterNodeState {
+    UNKNOWN_NODE_STATE = 0;
+    RUNNING = 1;
+  }
+  string rack = 1; // "/rack1",
+  ClusterNodeState state = 2; // "RUNNING",
+  string id = 3; // "lbdp21bbd.qa.pncint.net:8041",
+  string nodeHostName = 4; // "lbdp21bbd.qa.pncint.net",
+  string nodeHTTPAddress = 5; // "lbdp21bbd.qa.pncint.net:8044",
+  int64 lastHealthUpdate = 6; // 1689354049116,
+  string version = 7; // "3.0.0-cdh6.3.3",
+  string healthReport = 8; // ""
+  int32 numContainers = 9; // 12,
+  int64 usedMemoryMB = 10; // 134144,
+  int64 availMemoryMB = 11; // 21504,
+  int32 usedVirtualCores = 12; // 18,
+  int32 availableVirtualCores = 13; // 24,
+  int32 numRunningOpportContainers = 14; // 0,
+  int32 usedMemoryOpportGB = 15; // 0,
+  int32 usedVirtualCoresOpport = 16; // 0,
+  int32 numQueuedContainers = 17; // 0
+}
